@@ -1,1 +1,0 @@
-from gpacman import *
