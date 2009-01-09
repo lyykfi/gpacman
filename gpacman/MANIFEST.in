@@ -1,0 +1,4 @@
+include data/*.*
+include data/locale/*.*
+include data/icons/*.*
+
