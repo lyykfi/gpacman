@@ -1,0 +1,18 @@
+# Contributor: Andrey Makar <lyykfi@gmail.com>
+
+pkgname=gpacman
+pkgver=0.0.1
+pkgrel=3
+pkgdesc="GTK package manager"
+url="http://code.google.com/p/gpacman/"
+license=("GPL")
+arch=("i686" "x86_64")
+depends=('pygtk' 'vte' 'gtk2')
+source=("http://gpacman.googlecode.com/files/$pkgname-$pkgver.tar.gz")
+md5sums=("260c2c4a91ea57b25d1fbc00968fb497")
+
+build () {
+	cd $startdir/src/$pkgname-$pkgver
+	 python setup.py install --root=$startdir/pkg
+}
+
