@@ -9,15 +9,15 @@
 
 import gtk, gtk.glade
 
-from gpacman.constants import *
+from config_manager import *
 from vte import Terminal
 
 class execute_window:
-    global GLADE_FILE_PATH
 
     def __init__(self, main_window, flag=0):
         
-        glade_xml = gtk.glade.XML(GLADE_FILE_PATH)
+        cfg_manager = config_manager()
+        glade_xml = gtk.glade.XML(DATA_DIR+"/"+cfg_manager.config_parser.get("General", "glade_file"))
         
         #Widgets
         self._window = glade_xml.get_widget("execute_window")

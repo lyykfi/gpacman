@@ -11,13 +11,11 @@ import os, re
 import urllib
 
 from package import package, package_bilder
-from constants import *
 from repository import repository
-from pacman_config_parser import pacman_config_parser
+from config_manager import config_manager
 
 """packages_manager"""
 class pacman_manager():
-    global PATH_TO_PACMAN_LIB, PATH_TO_PACMAN_LOCAL, PATH_TO_PACMAN_SYNC
     
     """ Init """
     def __init__(self):
@@ -63,8 +61,9 @@ class pacman_manager():
     """ get_installed_packages """
     def get_installed_packages(self):
         
+        cfg_manager = config_manager()
         installed_packages = []
-        installed = os.listdir(PATH_TO_PACMAN_LOCAL)
+        installed = os.listdir(cfg_manager.config_parser.get("General", "path_to_pacman_lib")+"local")
         
         for package_full_name in installed:
             name_n_ver = package_full_name.split("-", package_full_name.count("-")-1)
@@ -85,9 +84,10 @@ class pacman_manager():
     def get_from_repositary_package_name_list(self, repository_name):
 
         package_list = None
+        cfg_manager = config_manager()
         
         try:
-            package_list = os.listdir("%s/%s" %(PATH_TO_PACMAN_SYNC, repository_name))
+            package_list = os.listdir("%s/%s" %(cfg_manager.config_parser.get("General", "path_to_pacman_lib")+"sync", repository_name))
         except OSError:
             return False
         try:
@@ -147,3 +147,34 @@ class pacman_manager():
     def refresh(self):
         self._repositaries = self._pacman_config_parser.parse()
         self._bind_all_packages()
+
+""" pacman_config_parser """
+class pacman_config_parser:
+    
+    def parse(self):
+        repositaries = []
+        
+        cfg_manager = config_manager()
+        conf_file = file(cfg_manager.config_parser.get("General", "path_conf_file"), "r").read()
+        conf_file_lines = conf_file.splitlines()
+        
+        i = 0;
+        
+        for line in conf_file_lines:
+            if line.startswith("["):
+                begin = line.index("[") + len("[")
+                end = line.index("]")
+                name = line[begin:end].strip()
+                
+                """ Fix [options] """
+                if name != "options":
+                    next_line = conf_file_lines[i+1]
+                    
+                    if next_line.startswith(""):
+                        cfg_manager = config_manager()
+                        serverUrl = conf_file_lines[i+1].replace(cfg_manager.config_parser.get("General", "server_indificator"), "")
+                        repositaries.append(repository(name, serverUrl))
+                
+            i+=1
+            
+        return repositaries

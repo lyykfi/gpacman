@@ -13,7 +13,7 @@ import gobject
 import gpacman, gpacman.ui
 
 from gpacman.ui.main_window import *
-from gpacman.constants import *
+from gpacman.config_manager import *
 
 """ gnome_pacman """
 class gnome_pacman():
@@ -37,11 +37,13 @@ class gnome_pacman():
 class gpacmanGUI:
     def __init__(self):
         
+        cfg_manager = config_manager()
+        
         self._main_window = main_window()
        
         #Objects
         self._popup_menu = gtk.Menu()
-        self._trayicon = gtk.status_icon_new_from_file(ICONS_DIR_PATH+"/"+"gpacman.png")
+        self._trayicon = gtk.status_icon_new_from_file(DATA_DIR+"/icons/gpacman.png")
         
         #Inits
         self._init_tray()

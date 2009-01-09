@@ -10,14 +10,14 @@
 import gtk, gtk.glade
 
 from vte import Terminal
-from gpacman.constants import *
+from config_manager import *
 
 class setting_window:
-    global GLADE_FILE_PATH
     
-    def __init__(self, main_window, flag=0):
+    def __init__(self):
         
-        glade_xml = gtk.glade.XML(GLADE_FILE_PATH)
+        cfg_manager = config_manager()
+        glade_xml = gtk.glade.XML(DATA_DIR+"/"+cfg_manager.config_parser.get("General", "glade_file"))
         
         #Widgets
         self._window = glade_xml.get_widget("setting_window")
@@ -25,9 +25,6 @@ class setting_window:
         events_dict = { 
     		"on_cancel_button_clicked": self.on_cancel_button_clicked}
         glade_xml.signal_autoconnect(events_dict)
-        
-        #Main window
-        self._main_window = main_window
         
     def show(self):
         self._window.show()

@@ -11,8 +11,8 @@ import gtk, gtk.glade
 import pango
 import gobject
 
-from gpacman.constants import *
 from gpacman.pacman_manager import *
+from gpacman.config_manager import *
 from gpacman.command_builder import *
 from gpacman.models import *
 
@@ -27,12 +27,12 @@ from decorator import decorator
 
 """ main_window """
 class main_window:
-    global GLADE_FILE_PATH
     
     def __init__(self):
 
         # Glade
-        glade_xml = gtk.glade.XML(GLADE_FILE_PATH, "main_window")
+        cfg_manager = config_manager()
+        glade_xml = gtk.glade.XML(DATA_DIR+"/"+cfg_manager.config_parser.get("General", "glade_file"), "main_window")
         
         self.window = glade_xml.get_widget("main_window")
         
@@ -73,7 +73,7 @@ class main_window:
         
         self._about_dialog = about_dialog()
         self._execute_window = execute_window(self)
-        self._setting_window = setting_window(self)
+        self._setting_window = setting_window()
         
         #Builder
         self._command_builder = command_builder()
@@ -352,9 +352,10 @@ class main_window:
         package_model = self._package_tree.get_model()
         actions_model = self._actions_tree.get_model()
         
+        cfg_manager = config_manager()
         package_model[path][0] = not package_model[path][0]
         add = True
-        state = REMOVE_STRING
+        state = cfg_manager.config_parser.get("General", "remove_string")
         
         action_store = actions_store()
         
@@ -363,7 +364,7 @@ class main_window:
             action_store = actions_model
         
         if package_model[path][0] == True:
-            state = INSTALL_STRING
+            state = cfg_manager.config_parser.get("General", "install_string")
         
         if action_store.isset([state, package_model[path][1].replace("<b>","").replace("</b>","")]) == True:
            add = False

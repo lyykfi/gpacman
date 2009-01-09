@@ -8,13 +8,13 @@
 # gpacman is copyright (C)2008 by Andre Makar
 
 import gtk, gtk.glade
-
-from gpacman.constants import *
+from config_manager import *
 
 class about_dialog:
-    global GLADE_FILE_PATH
 
     def __init__(self):
         
-        glade = gtk.glade.XML(GLADE_FILE_PATH)
+        cfg_manager = config_manager()
+        glade = gtk.glade.XML(DATA_DIR+"/"+cfg_manager.config_parser.get("General", "glade_file"))
+        
         self.about_window = glade.get_widget("about_dialog")

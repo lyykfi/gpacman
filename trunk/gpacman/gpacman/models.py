@@ -9,7 +9,6 @@
 
 import gtk, gobject
 
-from constants import *
 
 """ packagers_store """
 class packagers_store(gtk.ListStore):
