@@ -7,8 +7,6 @@
 
 # gpacman is copyright (C)2008 by Andre Makar
 
-from constants import *
-
 """ repository """
 class repository:
     

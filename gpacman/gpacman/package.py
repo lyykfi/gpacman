@@ -8,7 +8,7 @@
 # gpacman is copyright (C)2008 by Andre Makar
 
 import os, re, time
-from constants import *
+from config_manager import *
 
 """ package """
 class package:
@@ -61,12 +61,13 @@ class package:
     """ _get_description_line_by_package """
     def _get_description_line_by_package(self, line):
     
+        cfg_manager = config_manager()
         name_n_ver = self.name + '-' + self.version
         
         if self.installed == False:
-            path = "%s/sync/%s/%s/%s" %(PATH_TO_PACMAN_LIB, self.repo, name_n_ver, line)
+            path = "%s/sync/%s/%s/%s" %(cfg_manager.config_parser.get("General", "path_to_pacman_lib"), self.repo, name_n_ver, line)
         else:
-            path = PATH_TO_PACMAN_LOCAL+'/%s/%s' %(name_n_ver, line)
+            path = cfg_manager.config_parser.get("General", "path_to_pacman_lib")+"local"+'/%s/%s' %(name_n_ver, line)
         
         try:
             raw_file = open(path).read()
