@@ -63,7 +63,7 @@ class pacman_manager():
     """ get_installed_packages """
     def get_installed_packages(self):
         
-        installed_packages = {}
+        installed_packages = []
         installed = os.listdir(PATH_TO_PACMAN_LOCAL)
         
         for package_full_name in installed:
@@ -77,7 +77,7 @@ class pacman_manager():
                 else:
                     name = part
                     
-            #installed_packages[name] = "gf"
+            installed_packages.append(name)
             
         return installed_packages
     
